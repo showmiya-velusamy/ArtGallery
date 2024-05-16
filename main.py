@@ -1,7 +1,7 @@
-from typing import Self
-from Dao.ArtGalleryProcessor import ArtGalleryProcessor
+from dao.ArtGalleryProcessor import ArtGalleryProcessor
 from Entity.Artwork import Artwork
 from Entity.User import User
+
 class ArtManagement:
     def __init__(self):
         self.ArtGalleryProcessor = ArtGalleryProcessor()

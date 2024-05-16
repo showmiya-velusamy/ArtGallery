@@ -1,5 +1,5 @@
 import sqlite3
-from Dao.IVirtualArtGallery import IVirtualArtGallery
+from dao.IVirtualArtGallery import IVirtualArtGallery
 from Exception.UserNotFound import UserNotFoundException
 from Exception.ArtworkNotFound import ArtWorkNotFoundException
 
