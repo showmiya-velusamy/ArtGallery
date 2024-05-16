@@ -5,6 +5,8 @@ from Entity.User import User
 class ArtManagement:
     def __init__(self):
         self.ArtGalleryProcessor = ArtGalleryProcessor()
+    def main(self):
+        self.display_menu()
     
     def display_menu(self):
         print("\n Welcome to Virtual Art Gallery")
@@ -105,6 +107,5 @@ class ArtManagement:
             else:
                 print("Invalid choice❌")
 if __name__ == "__main__":
-      ArtworkManagement = ArtManagement()
-      ArtworkManagement.main()
-        
+     Art_Management=ArtManagement()        
+     Art_Management.main()
