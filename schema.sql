@@ -14,7 +14,7 @@ CREATE TABLE Artwork (
     Description TEXT,
     CreationDate DATE,
     Medium VARCHAR(100),
-    ImageURL VARCHAR(255) ,-- or any reference to the digital representation
+    ImageURL VARCHAR(255) ,
 	ArtistID INT,
     FOREIGN KEY (ArtistID) REFERENCES Artist(ArtistID)
 );
@@ -22,13 +22,13 @@ CREATE TABLE Artwork (
 CREATE TABLE [User] (
     UserID INT PRIMARY KEY,
     Username VARCHAR(50) NOT NULL,
-    Password VARCHAR(255) NOT NULL, -- Storing hashed passwords for security
+    Password VARCHAR(255) NOT NULL, 
     Email VARCHAR(255) UNIQUE NOT NULL,
     FirstName VARCHAR(50),
     LastName VARCHAR(50),
     DateOfBirth DATE,
-    ProfilePicture VARCHAR(255), -- URL or reference to the profile picture
-    FavoriteArtworks VARCHAR(255) -- Comma-separated list of references to ArtworkIDs
+    ProfilePicture VARCHAR(255), 
+    FavoriteArtworks VARCHAR(255) 
 );
 
 CREATE TABLE Gallery (
@@ -36,8 +36,8 @@ CREATE TABLE Gallery (
     Name VARCHAR(255) NOT NULL,
     Description TEXT,
     Location VARCHAR(255),
-    Curator INT, -- Reference to ArtistID
-    OpeningHours VARCHAR(255), -- Assuming opening hours can be represented as a string
+    Curator INT, 
+    OpeningHours VARCHAR(255), 
 	ArtistID INT,
 	FOREIGN KEY (ArtistID) REFERENCES Artist(ArtistID)
 );

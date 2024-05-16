@@ -6,7 +6,7 @@ class DBConnUtil:
         try:
             connection = pyodbc.connect('Driver={SQL Server};'
                                         r'Server=DESKTOP-QFPQL5Q\MSSQLSERVER01;'
-                                        'Database=OrderManagement;'
+                                        'case study;'
                                         'Trusted_Connection=yes;')
             return connection
         except Exception as e:

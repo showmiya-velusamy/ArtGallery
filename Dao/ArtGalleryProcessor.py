@@ -1,165 +1,205 @@
-import sqlite3
-from Dao.IVirtualArtGallery import IVirtualArtGallery
-from Exception.UserNotFound import UserNotFoundException
-from Exception.ArtworkNotFound import ArtWorkNotFoundException
+from Util.DBConnUtil import DBConnUtil
+
+class ArtistService(DBConnUtil):
+    def read_artist(self):
+        try:
+            self.cursor.execute("SELECT * FROM Artist")
+            artists = self.cursor.fetchall()
+            for art in artists:
+                print(art)
+            return ArtistService
+        except Exception as e:
+            print(e)
+            return None
+
+    def add_artist(self,ArtistID, name, biography,birthDate,nationality,website,contactInformation):
+        try:
+            self.cursor.execute(
+                "INSERT INTO Artist (ArtistID, name, biography,birthDate,nationality,website,contactInformation) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (ArtistID, name, biography,birthDate,nationality,website,contactInformation)),
+            
+            self.conn.commit()
+            self.cursor.execute(
+                "SELECT @@IDENTITY AS ID"
+            )  # For getting last inserted ID in MSSQL
+            last_id = self.cursor.fetchone()[0]
+            return last_id
+        except Exception as e:
+            print(e)
+            return None
+
+    def update_movie(self,ArtistID):
+        try:
+           self.cursor.execute(
+            """
+            UPDATE Artist
+            SET name = ?, biography = ?, birthDate = ?, nationality=?,website=?, contactInformation=?
+            WHERE artistId = ?
+            """,
+            (ArtistService.name,ArtistService.biography,ArtistService.birthDate,ArtistService.nationality,ArtistService.website,ArtistService.contactInformation,ArtistID),
+            )
+           self.conn.commit()
+        except Exception as e:
+            print(e)
+            return None
+    def delete_movie(self, artistID):
+        try:
+           self.cursor.execute("DELETE FROM Artist WHERE ArtistId = ?", artistID)
+           self.conn.commit()
+        except Exception as e:
+            print(e)
+            return None
+    
+class ArtworkService(DBConnUtil):
+    def read_artwork(self):
+        try:
+            self.cursor.execute("SELECT * FROM Artwork")
+            Artworks = self.cursor.fetchall()
+            for arts in Artworks:
+                print(arts)
+            return ArtworkService
+        except Exception as e:
+            print(e)
+            return None
+
+    def add_artwork(self,ArtworkID,title,description,creationDate,medium,imageURL,ArtistID):
+        try:
+            self.cursor.execute(
+                "INSERT INTO Artwork (ArtworkID,title,description,creationDate,medium,imageURL,ArtistID) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (ArtworkID,title,description,creationDate,medium,imageURL,ArtistID)),
+            
+            self.conn.commit()
+            self.cursor.execute(
+                "SELECT @@IDENTITY AS ID"
+            )  # For getting last inserted ID in MSSQL
+            last_id = self.cursor.fetchone()[0]
+            return last_id
+        except Exception as e:
+            print(e)
+            return None
+
+    def update_artwork(self,ArtworkID):
+        try:
+           self.cursor.execute(
+            """
+            UPDATE Artwork
+            SET title = ?,description =?,creationDate = ?, medium=?,imageURL=?, ArtistID=?
+            WHERE ArtworkId = ?
+            """,
+            (ArtworkService.title,ArtworkService.description,ArtworkService.creationDate,ArtworkService.medium,ArtworkService.imageURL,ArtworkService.ArtistID,ArtworkID),
+          )
+           self.conn.commit()
+        except Exception as e:
+            print(e)
+            return None
+
+    def delete_artwork(self, ArtworkID):
+        try:
+           self.cursor.execute("DELETE FROM Artwork WHERE ArtworkId = ?", ArtworkID)
+           self.conn.commit()
+        except Exception as e:
+            print(e)
+            return None
+    
+class GalleryService(DBConnUtil):
+    def read_Gallery(self):
+        try:
+            self.cursor.execute("select * from Gallery")
+            galleries=self.cursor.fetchall()
+            for gallery in galleries:
+                print(gallery)
+ 
+        except Exception as e:
+            print(e)
+
+    def add_Gallery(self,GalleryId,name, description, location, curator, openingHours, ArtistId):
+        try:
+            self.cursor.execute("insert INTO Gallery (galleryId,name, description, location, curator, openingHours, artistID) VALUES(?,?,?,?,?,?,?)",
+                                (GalleryId,name, description, location, curator, openingHours, ArtistId))
+            
+            self.conn.commit() 
+        except Exception as e:
+            print(e)
+       
+    def remove_Gallery(self,GalleryId):
+        try:
+            self.cursor.execute("Delete FROM Gallery WHERE GalleryId=?",(GalleryId))                                   
+            
+            self.conn.commit()
+        except Exception as e:
+            print(e)
+       
+class UserService(DBConnUtil):
+    def read_User(self):
+        try:
+            self.cursor.execute("select * from User")
+            users=self.cursor.fetchall()
+            for customer in users:
+                print(customer)
+ 
+        except Exception as e:
+            print(e)
+
+    def add_User(self,UserId,username, password, email, firstName, lastName, dateOfBirth,profilePicture,favouriteArtworks):
+        try:
+            self.cursor.execute("insert INTO User (UserId,username, password, email, firstName, lastName, dateOfBirth,favouriteArtworks) VALUES(?,?,?,?,?,?,?,?)",
+                                (UserId,username, password, email, firstName, lastName, dateOfBirth,profilePicture,favouriteArtworks))
+            
+            self.conn.commit() 
+        except Exception as e:
+            print(e)
+       
+    def delete_User(self,UserId):
+        try:
+            self.cursor.execute("Delete FROM User WHERE UserId=?",(UserId))                                   
+            
+            self.conn.commit()
+        except Exception as e:
+            print(e)
+       
+
+    def update_User(self,UserId,username, password, email, firstName, lastName, dateOfBirth,profilePicture,favouriteArtworks):
+        try:
+            self.cursor.execute("Update User SET username = ?, password = ?, email = ?, firstName = ?, lastName = ?, dateOfBirth=?,profilePicture=?,favouriteArtworks WHERE UserId= ?",
+                        (username, password, email, firstName, lastName, dateOfBirth,profilePicture,favouriteArtworks,UserId)
+                        )
+            self.conn.commit()
+        except Exception as e:
+            print(e)
 
 
-class ArtGalleryProcessor(IVirtualArtGallery):
-    def __init__(self, db_file):
-        self.conn = sqlite3.connect(db_file)
-        self.cursor = self.conn.cursor()
-    def add_artwork(self, Artwork):
+class user_favourite:
+    def delete_favourite(self, ArtworkID):
         try:
-            # Insert Artwork data into the database
-            self.cursor.execute('''INSERT INTO Artwork (Title, Description, CreationDate, Medium, ImageURL, ArtistID)
-                     VALUES (?, ?, ?, ?, ?, ?)''',(Artwork.title, Artwork.description, Artwork.creation_date,
-                                      Artwork.medium, Artwork.image_url, Artwork.artist_id))
+            self.cursor.execute("DELETE FROM user_Favourite_Artworks WHERE ArtworkId = ?", ArtworkID)
             self.conn.commit()
-            print("Artwork added successfully.")
         except Exception as e:
-            # Handle any exceptions that occur during the operation
-            print(f"Error occurred while adding Artwork: {e}")
-        finally:
-            self.conn.close()
-    
-    def update_artwork(self, Artwork):
+            print(e)
+       
+    def update_favourite(self,UserId,ArtworkID):
         try:
-            # Update Artwork data in the database
-            self.cursor.execute('''UPDATE Artwork 
-                     SET Title = ?, Description = ?, CreationDate = ?, Medium = ?, ImageURL = ?, ArtistID = ?
-                     WHERE ArtworkID = ?''',(Artwork.title, Artwork.description, Artwork.creation_date,
-                                      Artwork.medium, Artwork.image_url, Artwork.artist_id, Artwork.artwork_id))
-            if self.cursor.rowcount == 0:
-                raise ArtWorkNotFoundException(Artwork.artwork_id) 
+            self.cursor.execute("Update user_Favourite_Artwork SET UserID WHERE ArtworkId= ?",
+                        (ArtworkID,UserId)
+                        )
             self.conn.commit()
-            print("Artwork updated successfully.")
-        except ArtWorkNotFoundException as e: 
-            print(f"Artwork not found: {e}")
         except Exception as e:
-            # Handle any other exceptions that occur during the operation
-            print(f"Error occurred while updating Artwork: {e}")
-        finally:
-            self.conn.close()
-            
-    def remove_artwork(self, ArtworkID):
+            print(e)
+
+    def read_favourite(self):
         try:
-            # Delete Artwork data from the database
-            self.cursor.execute( '''DELETE FROM Artwork WHERE ArtworkID = ?''',
-            (ArtworkID,))
-            if self.cursor.rowcount == 0:
-                raise ArtWorkNotFoundException(ArtworkID) 
-            self.conn.commit()
-            print("Artwork removed successfully.")
-        except ArtWorkNotFoundException as e:
-            print(f"Artwork not found: {e}")
+            self.cursor.execute("select * from user_favourite_Artworks")
+            favourites=self.cursor.fetchall()
+            for fav in favourites:
+                print(fav)
+ 
         except Exception as e:
-            # Handle any other exceptions that occur during the operation
-            print(f"Error occurred while removing Artwork: {e}")
-        finally:
-            self.conn.close()
+            print(e)
             
-    def get_artwork_by_id(self, ArtworkID):
+    def add_favourites(self,UserId,ArtworkID):
         try:
-            self.cursor.execute("select * from User_Favorite_Artwork where userId=?",(ArtworkID))
-            favorite_artwork=self.cursor.fetchall()
-            for Artwork in favorite_artwork:
-                print(Artwork)
-            if favorite_artwork is None:
-                raise ArtWorkNotFoundException(ArtworkID) 
-            # Construct artwork object from fetched data
-            artwork = Artwork(favorite_artwork[0], favorite_artwork[1], favorite_artwork[2], favorite_artwork[3], favorite_artwork[4], favorite_artwork[5], favorite_artwork[6])
-            return artwork
-        except ArtWorkNotFoundException as e: 
-            print(f"Artwork not found: {e}")
-            return None  # Return None if artwork not found
+            self.cursor.execute("insert INTO user_Favourite_Artworks (ArtworkID,UserID) VALUES(?,?)",
+                                (ArtworkID,UserId))
+            
+            self.conn.commit() 
         except Exception as e:
-            print(f"Error occurred while getting Artwork by ID: {e}")
-        finally:
-            self.conn.close()
-   
-   
-    def search_artworks(self, keyword):
-        try:
-            # Search artworks in the database by keyword
-            self.cursor.execute( '''SELECT * FROM Artwork WHERE Title LIKE ? OR Description LIKE ?''',
-            ('%'+keyword+'%', '%'+keyword+'%'))
-            artworks = []
-            for row in self.cursor.fetchall():
-                # Construct Artwork objects from fetched data
-                Artwork = Artwork(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
-                artworks.append(Artwork)
-            return artworks
-        except Exception as e:
-            # Handle any exceptions that occur during the operation
-            print(f"Error occurred while searching artworks: {e}")
-            return []
-        finally:
-            self.conn.close()
-            
-    def add_artwork_to_favorite(self, userID, artworkID):
-        try:
-            # Check if the user exists
-            self.cursor.execute("SELECT UserID FROM User WHERE UserID = ?", (userID,))
-            user_data = self.cursor.fetchone()
-            if user_data is None:
-                raise UserNotFoundException(userID) 
-            # Add artwork to the user's favorite artworks
-            self.cursor.execute("INSERT INTO user_Favourite_Artwork (ArtworkID, UserID) VALUES (?, ?)",
-            (artworkID, userID))
-            self.conn.commit()
-            print("Artwork added to favorites successfully.")
-        except UserNotFoundException as e: 
-            print(f"User not found: {e}")
-        except Exception as e:
-            # Handle any other exceptions that occur during the operation
-            print(f"Error occurred while adding artwork to favorites: {e}")
-        finally:
-            self.conn.close()
-            
-    def remove_artwork_from_favorite(self, userID, artworkID):
-        try:
-            # Check if the user exists
-            self.cursor.execute("SELECT UserID FROM User WHERE UserID = ?", (userID,))
-            user_data = self.cursor.fetchone()
-            if user_data is None:
-                raise UserNotFoundException(userID)
-            # Remove artwork from the user's favorite artworks
-            self.cursor.execute("DELETE FROM user_Favourite_Artwork WHERE UserID = ? AND ArtworkID = ?",
-            (userID, artworkID))
-            self.conn.commit()
-            print("Artwork removed from favorites successfully.")
-        except UserNotFoundException as e: 
-            print(f"User not found: {e}")
-        except Exception as e:
-            # Handle any other exceptions that occur during the operation
-            print(f"Error occurred while removing artwork from favorites: {e}")
-        finally:
-            self.conn.close()
-            
-    def get_user_favorite_artworks(self, userID):
-        try:
-            # Check if the user exists
-            self.cursor.execute("SELECT UserID FROM User WHERE UserID = ?", (userID,))
-            user_data = self.cursor.fetchone()
-            if user_data is None:
-                raise UserNotFoundException(userID) 
-            
-            # Retrieve the user's favorite artworks
-            self.cursor.execute("SELECT ArtworkID FROM user_Favourite_Artwork WHERE UserID = ?",
-             (userID,))
-            favorite_artworks = [row[0] for row in self.cursor.fetchall()]
-            return favorite_artworks
-        except UserNotFoundException as e:
-            print(f"User not found: {e}")
-            return []
-        except Exception as e:
-            # Handle any other exceptions that occur during the operation
-            print(f"Error occurred while getting user's favorite artworks: {e}")
-            return []
-        finally:
-            self.conn.close()
-            
-    def close_connection(self):
-        self.conn.close()
-            
-    
+            print(e)

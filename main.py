@@ -1,4 +1,4 @@
-from dao.ArtGalleryProcessor import ArtGalleryProcessor
+from Dao.ArtGalleryProcessor import ArtGalleryProcessor
 from Entity.Artwork import Artwork
 from Entity.User import User
 
