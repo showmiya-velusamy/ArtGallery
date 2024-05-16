@@ -1,3 +1,4 @@
+from typing import Self
 from Dao.ArtGalleryProcessor import ArtGalleryProcessor
 from Entity.Artwork import Artwork
 from Entity.User import User
@@ -103,8 +104,7 @@ class ArtManagement:
                 break
             else:
                 print("Invalid choice❌")
-
 if __name__ == "__main__":
       ArtworkManagement = ArtManagement()
-      ArtManagement.main()
+      ArtworkManagement.main()
         
