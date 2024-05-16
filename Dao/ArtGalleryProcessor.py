@@ -1,15 +1,18 @@
-from .IVirtualArtGallery import IVirtualArtGallery
+import sqlite3
+from Dao.IVirtualArtGallery import IVirtualArtGallery
 from Exception.UserNotFound import UserNotFoundException
 from Exception.ArtworkNotFound import ArtWorkNotFoundException
-from Util.DBConnUtil import DBConnUtil
-from Entity.User import User
+
 
 class ArtGalleryProcessor(IVirtualArtGallery):
+    def __init__(self, db_file):
+        self.conn = sqlite3.connect(db_file)
+        self.cursor = self.conn.cursor()
     def add_artwork(self, Artwork):
         try:
             # Insert Artwork data into the database
             self.cursor.execute('''INSERT INTO Artwork (Title, Description, CreationDate, Medium, ImageURL, ArtistID)
-                     VALUES (?, ?, ?, ?, ?, ?)'''(Artwork.title, Artwork.description, Artwork.creation_date,
+                     VALUES (?, ?, ?, ?, ?, ?)''',(Artwork.title, Artwork.description, Artwork.creation_date,
                                       Artwork.medium, Artwork.image_url, Artwork.artist_id))
             self.conn.commit()
             print("Artwork added successfully.")
@@ -24,7 +27,7 @@ class ArtGalleryProcessor(IVirtualArtGallery):
             # Update Artwork data in the database
             self.cursor.execute('''UPDATE Artwork 
                      SET Title = ?, Description = ?, CreationDate = ?, Medium = ?, ImageURL = ?, ArtistID = ?
-                     WHERE ArtworkID = ?'''(Artwork.title, Artwork.description, Artwork.creation_date,
+                     WHERE ArtworkID = ?''',(Artwork.title, Artwork.description, Artwork.creation_date,
                                       Artwork.medium, Artwork.image_url, Artwork.artist_id, Artwork.artwork_id))
             if self.cursor.rowcount == 0:
                 raise ArtWorkNotFoundException(Artwork.artwork_id) 
@@ -41,7 +44,7 @@ class ArtGalleryProcessor(IVirtualArtGallery):
     def remove_artwork(self, ArtworkID):
         try:
             # Delete Artwork data from the database
-            self.cursor.execute( '''DELETE FROM Artwork WHERE ArtworkID = ?'''
+            self.cursor.execute( '''DELETE FROM Artwork WHERE ArtworkID = ?''',
             (ArtworkID,))
             if self.cursor.rowcount == 0:
                 raise ArtWorkNotFoundException(ArtworkID) 
@@ -78,7 +81,7 @@ class ArtGalleryProcessor(IVirtualArtGallery):
     def search_artworks(self, keyword):
         try:
             # Search artworks in the database by keyword
-            self.cursor.execute( '''SELECT * FROM Artwork WHERE Title LIKE ? OR Description LIKE ?'''
+            self.cursor.execute( '''SELECT * FROM Artwork WHERE Title LIKE ? OR Description LIKE ?''',
             ('%'+keyword+'%', '%'+keyword+'%'))
             artworks = []
             for row in self.cursor.fetchall():
@@ -101,7 +104,7 @@ class ArtGalleryProcessor(IVirtualArtGallery):
             if user_data is None:
                 raise UserNotFoundException(userID) 
             # Add artwork to the user's favorite artworks
-            self.cursor.execute("INSERT INTO user_Favourite_Artwork (ArtworkID, UserID) VALUES (?, ?)"
+            self.cursor.execute("INSERT INTO user_Favourite_Artwork (ArtworkID, UserID) VALUES (?, ?)",
             (artworkID, userID))
             self.conn.commit()
             print("Artwork added to favorites successfully.")
@@ -121,7 +124,7 @@ class ArtGalleryProcessor(IVirtualArtGallery):
             if user_data is None:
                 raise UserNotFoundException(userID)
             # Remove artwork from the user's favorite artworks
-            self.cursor.execute("DELETE FROM user_Favourite_Artwork WHERE UserID = ? AND ArtworkID = ?"
+            self.cursor.execute("DELETE FROM user_Favourite_Artwork WHERE UserID = ? AND ArtworkID = ?",
             (userID, artworkID))
             self.conn.commit()
             print("Artwork removed from favorites successfully.")
@@ -142,7 +145,7 @@ class ArtGalleryProcessor(IVirtualArtGallery):
                 raise UserNotFoundException(userID) 
             
             # Retrieve the user's favorite artworks
-            self.cursor.execute("SELECT ArtworkID FROM user_Favourite_Artwork WHERE UserID = ?"
+            self.cursor.execute("SELECT ArtworkID FROM user_Favourite_Artwork WHERE UserID = ?",
              (userID,))
             favorite_artworks = [row[0] for row in self.cursor.fetchall()]
             return favorite_artworks
@@ -155,6 +158,8 @@ class ArtGalleryProcessor(IVirtualArtGallery):
             return []
         finally:
             self.conn.close()
-        
+            
+    def close_connection(self):
+        self.conn.close()
             
     
