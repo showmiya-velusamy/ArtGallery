@@ -7,19 +7,18 @@ class User:
         self.firstName = firstName
         self.lastName = lastName
         self.dateOfBirth = dateOfBirth
-        self.dateOfBirth = dateOfBirth
         self.favoriteArtworks = favoriteArtworks
         
     def get_userID(self):
         return self.userID
 
-    def set_dateOfBirth(self, userID):
+    def set_userID(self, userID):
         self.userID = userID
 
     def get_username(self):
         return self.username
 
-    def set_name(self, username):
+    def set_username(self, username):
         self.username = username
 
     def get_password(self):
