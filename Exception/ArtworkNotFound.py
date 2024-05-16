@@ -1,4 +1,3 @@
-class ArtworkNotFound(Exception):
-    def __init__(self, message="Artwork not found."):
-        self.message = message
-        super().__init__(self.message)
+class ArtWorkNotFoundException(Exception):
+    def __init__(self, artwork_id):
+        super().__init__(f"Artwork with ID {artwork_id} not found.")

@@ -30,7 +30,7 @@ class ArtGalleryProcessor(IVirtualArtGallery):
                 raise ArtWorkNotFoundException(Artwork.artwork_id) # type: ignore
             self.conn.commit()
             print("Artwork updated successfully.")
-        except ArtWorkNotFoundException as e: # type: ignore
+        except ArtWorkNotFoundException as e: 
             print(f"Artwork not found: {e}")
         except Exception as e:
             # Handle any other exceptions that occur during the operation
