@@ -1,6 +1,6 @@
 from .IVirtualArtGallery import IVirtualArtGallery
-from Exception.UserNotFound import UserNotFound
-from Exception.ArtworkNotFound import ArtworkNotFound
+from Exception.UserNotFound import UserNotFoundException
+from Exception.ArtworkNotFound import ArtWorkNotFoundException
 from Util.DBConnUtil import DBConnUtil
 from Entity.User import User
 
@@ -27,7 +27,7 @@ class ArtGalleryProcessor(IVirtualArtGallery):
                      WHERE ArtworkID = ?'''(Artwork.title, Artwork.description, Artwork.creation_date,
                                       Artwork.medium, Artwork.image_url, Artwork.artist_id, Artwork.artwork_id))
             if self.cursor.rowcount == 0:
-                raise ArtWorkNotFoundException(Artwork.artwork_id) # type: ignore
+                raise ArtWorkNotFoundException(Artwork.artwork_id) 
             self.conn.commit()
             print("Artwork updated successfully.")
         except ArtWorkNotFoundException as e: 
@@ -44,10 +44,10 @@ class ArtGalleryProcessor(IVirtualArtGallery):
             self.cursor.execute( '''DELETE FROM Artwork WHERE ArtworkID = ?'''
             (ArtworkID,))
             if self.cursor.rowcount == 0:
-                raise ArtWorkNotFoundException(ArtworkID) # type: ignore
+                raise ArtWorkNotFoundException(ArtworkID) 
             self.conn.commit()
             print("Artwork removed successfully.")
-        except ArtWorkNotFoundException as e: # type: ignore
+        except ArtWorkNotFoundException as e:
             print(f"Artwork not found: {e}")
         except Exception as e:
             # Handle any other exceptions that occur during the operation
@@ -62,11 +62,11 @@ class ArtGalleryProcessor(IVirtualArtGallery):
             for Artwork in favorite_artwork:
                 print(Artwork)
             if favorite_artwork is None:
-                raise ArtWorkNotFoundException(ArtworkID) # type: ignore
+                raise ArtWorkNotFoundException(ArtworkID) 
             # Construct artwork object from fetched data
             artwork = Artwork(favorite_artwork[0], favorite_artwork[1], favorite_artwork[2], favorite_artwork[3], favorite_artwork[4], favorite_artwork[5], favorite_artwork[6])
             return artwork
-        except ArtWorkNotFoundException as e: # type: ignore
+        except ArtWorkNotFoundException as e: 
             print(f"Artwork not found: {e}")
             return None  # Return None if artwork not found
         except Exception as e:
@@ -99,13 +99,13 @@ class ArtGalleryProcessor(IVirtualArtGallery):
             self.cursor.execute("SELECT UserID FROM User WHERE UserID = ?", (userID,))
             user_data = self.cursor.fetchone()
             if user_data is None:
-                raise UserNotFoundException(userID) # type: ignore
+                raise UserNotFoundException(userID) 
             # Add artwork to the user's favorite artworks
             self.cursor.execute("INSERT INTO user_Favourite_Artwork (ArtworkID, UserID) VALUES (?, ?)"
             (artworkID, userID))
             self.conn.commit()
             print("Artwork added to favorites successfully.")
-        except UserNotFoundException as e: # type: ignore
+        except UserNotFoundException as e: 
             print(f"User not found: {e}")
         except Exception as e:
             # Handle any other exceptions that occur during the operation
@@ -119,13 +119,13 @@ class ArtGalleryProcessor(IVirtualArtGallery):
             self.cursor.execute("SELECT UserID FROM User WHERE UserID = ?", (userID,))
             user_data = self.cursor.fetchone()
             if user_data is None:
-                raise UserNotFoundException(userID) # type: ignore
+                raise UserNotFoundException(userID)
             # Remove artwork from the user's favorite artworks
             self.cursor.execute("DELETE FROM user_Favourite_Artwork WHERE UserID = ? AND ArtworkID = ?"
             (userID, artworkID))
             self.conn.commit()
             print("Artwork removed from favorites successfully.")
-        except UserNotFoundException as e: # type: ignore
+        except UserNotFoundException as e: 
             print(f"User not found: {e}")
         except Exception as e:
             # Handle any other exceptions that occur during the operation
@@ -139,14 +139,14 @@ class ArtGalleryProcessor(IVirtualArtGallery):
             self.cursor.execute("SELECT UserID FROM User WHERE UserID = ?", (userID,))
             user_data = self.cursor.fetchone()
             if user_data is None:
-                raise UserNotFoundException(userID) # type: ignore
+                raise UserNotFoundException(userID) 
             
             # Retrieve the user's favorite artworks
             self.cursor.execute("SELECT ArtworkID FROM user_Favourite_Artwork WHERE UserID = ?"
              (userID,))
             favorite_artworks = [row[0] for row in self.cursor.fetchall()]
             return favorite_artworks
-        except UserNotFoundException as e: # type: ignore
+        except UserNotFoundException as e:
             print(f"User not found: {e}")
             return []
         except Exception as e:
