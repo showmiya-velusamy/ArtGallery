@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from Util.DBConnUtil import DBConnUtil
+from Util.DBConn import DBConnection
 
 class IUserFavouriteService(ABC):
     @abstractmethod
@@ -18,7 +18,7 @@ class IUserFavouriteService(ABC):
     def read_UserFavourite(self):
         pass
     
-class user_FavouriteService(IUserFavouriteService,DBConnUtil):
+class user_FavouriteService(IUserFavouriteService,DBConnection):
     def delete_favourite(self, ArtworkID):
         try:
             self.cursor.execute("DELETE FROM user_Favourite_Artworks WHERE ArtworkId = ?", ArtworkID)

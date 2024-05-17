@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from Util.DBConnUtil import DBConnUtil
+from Util.DBConn import DBConnection
 
 class IArtworkService(ABC):
     @abstractmethod
@@ -19,7 +19,7 @@ class IArtworkService(ABC):
         pass
     
 
-class ArtworkService(IArtworkService,DBConnUtil):
+class ArtworkService(IArtworkService,DBConnection):
     def read_artwork(self):
         try:
             self.cursor.execute("SELECT * FROM Artwork")

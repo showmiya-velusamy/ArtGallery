@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from Util.DBConnUtil import DBConnUtil
+from Util.DBConn import DBConnection
 
 class IUserService(ABC):
     @abstractmethod
@@ -20,7 +20,10 @@ class IUserService(ABC):
 
 
 
-class UserService(DBConnUtil):
+class UserService(IUserService,DBConnection):
+    def __init__(self):
+        super().__init__()
+        self.cursor = self.conn.cursor()
     def read_user(self):
         try:
             self.cursor.execute("select * from User")

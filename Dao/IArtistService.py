@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from Util.DBConnUtil import DBConnUtil
+from Util.DBConn import DBConnection
 
 class IArtistService(ABC):
     @abstractmethod
@@ -19,7 +19,7 @@ class IArtistService(ABC):
         pass
     
 
-class ArtistService(IArtistService,DBConnUtil):
+class ArtistService(IArtistService,DBConnection):
     def read_artist(self):
         try:
             self.cursor.execute("SELECT * FROM Artist")

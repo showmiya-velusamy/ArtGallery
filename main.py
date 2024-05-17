@@ -1,10 +1,8 @@
 from Dao.IArtworkService import ArtworkService
 from Dao.IArtistService import ArtistService
 from Dao.IGalleryService import GalleryService
-from Dao.IUserService import UserService
 from Dao.IUserFavouriteService import user_FavouriteService
 from Entity.Artwork import Artwork
-from Entity.User import User
 from Entity.Artist import Artist
 from Entity.Gallery import Gallery
 from Entity.User_Favourite_Artwork import user_Favourite_Artwork
@@ -13,7 +11,6 @@ class MainMenu:
     artist_service = ArtistService()
     artwork_service = ArtworkService()
     gallery_service=GalleryService()
-    user_service = UserService()
     user_favourite_service= user_FavouriteService
 
     def artist_menu(self):
@@ -171,8 +168,8 @@ def main():
             1. Artist Management
             2. Artwork Management
             3. Gallery Management
-            4.User Favourite Management
-            4. Exit
+            4. User Favourite Management
+            5. Exit
                 """
         )
 

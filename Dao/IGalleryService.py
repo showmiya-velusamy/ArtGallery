@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from Util.DBConnUtil import DBConnUtil
+from Util.DBConn import DBConnection
 
 class IGalleryService(ABC):
     @abstractmethod
@@ -18,7 +18,7 @@ class IGalleryService(ABC):
     def read_Gallery(self, GalleryID):
         pass
     
-class GalleryService(DBConnUtil):
+class GalleryService(IGalleryService,DBConnection):
     def read_Gallery(self):
         try:
             self.cursor.execute("select * from Gallery")
