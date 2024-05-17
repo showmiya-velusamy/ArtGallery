@@ -45,5 +45,21 @@ class GalleryService(DBConnUtil):
             self.conn.commit()
         except Exception as e:
             print(e)
+            
+    def update_Gallery(self,GalleryID):
+        try:
+           self.cursor.execute(
+            """
+            UPDATE Gallery
+            SET name = ?,description =?,location = ?, curator=?,openingHours=?, ArtistID=?
+            WHERE GalleryId = ?
+            """,
+            (GalleryService.name,GalleryService.description,GalleryService.location,GalleryService.curator,GalleryService.openingHours,GalleryService.ArtistID,GalleryID),
+          )
+           self.conn.commit()
+        except Exception as e:
+            print(e)
+            return None
+
        
 

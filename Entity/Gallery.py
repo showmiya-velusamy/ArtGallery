@@ -1,6 +1,6 @@
 class Gallery:
-    def __init__(self, artistID=None, name=None, description=None, location=None, curator=None, openingHours=None, artistID=None):
-        self.artistID = artistID
+    def __init__(self, GalleryID=None, name=None, description=None, location=None, curator=None, openingHours=None, artistID=None):
+        self.GalleryID = GalleryID
         self.name = name
         self.description = description
         self.location = location
@@ -8,11 +8,11 @@ class Gallery:
         self.openingHours = openingHours
         self.artistID = artistID
         
-    def get_galleryID(self):
-        return self.galleryID
+    def get_GalleryID(self):
+        return self.GalleryID
 
-    def set_galleryID(self, galleryID):
-        self.galleryID = galleryID
+    def set_GalleryID(self, GalleryID):
+        self.GalleryID = GalleryID
 
     def get_name(self):
         return self.name
