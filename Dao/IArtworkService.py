@@ -73,7 +73,9 @@ class ArtworkService(IArtworkService,DBConnection):
     def get_artwork_by_ID(self,ArtworkID):
         try:
             self.cursor.execute("SELECT * FROM Artwork WHERE ArtworkID = ? ",ArtworkID)
-            self.conn.comit()
+            artwork=self.cursor.fetchall()
+            print(artwork)
+            self.conn.commit()
         except Exception as e:
             print(e)
             return None

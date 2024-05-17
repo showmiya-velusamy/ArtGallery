@@ -38,7 +38,7 @@ class GalleryService(IGalleryService,DBConnection):
         except Exception as e:
             print(e)
        
-    def remove_Gallery(self,GalleryId):
+    def delete_Gallery(self,GalleryId):
         try:
             self.cursor.execute("Delete FROM Gallery WHERE GalleryId=?",(GalleryId))                                   
             
