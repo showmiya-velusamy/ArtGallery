@@ -1,5 +1,4 @@
 import unittest
-
 from Dao.IArtworkService import ArtworkService
 from Entity.Artwork import Artwork
 
