@@ -2,7 +2,7 @@ from Util.DBConn import DBConnection
 from abc import ABC,abstractmethod
 from myexceptions import ArtworkNotFoundException
 
-class IArtworkService(ABC):
+class I_ArtworkService(ABC):
     @abstractmethod
     def readArtwork(self):
         pass
@@ -18,7 +18,7 @@ class IArtworkService(ABC):
     @abstractmethod
     def updateArtwork(self,artworkId,description,title,creationDate,medium,imageURL,artistID):
         pass
-class ArtworkService(IArtworkService,DBConnection):
+class ArtworkService(I_ArtworkService,DBConnection):
     def readArtwork(self):
         try:
             self.cursor.execute("select * from artwork")

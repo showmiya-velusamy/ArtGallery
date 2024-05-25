@@ -2,7 +2,7 @@ from myexceptions import UserNotFoundException
 from Util.DBConn import DBConnection
 from abc import ABC,abstractmethod
 
-class IUserService(ABC):
+class I_UserService(ABC):
     @abstractmethod
     def readUser(self):
         pass
@@ -15,8 +15,8 @@ class IUserService(ABC):
     @abstractmethod
     def updateUser(self,userId,username,password,email,firstName,lastName,dateOfBirth,picture,favoriteArtworks):
         pass
-class UserService(IUserService,DBConnection):
 
+class UserService(I_UserService,DBConnection):
     def readUser(self):
         try:
             self.cursor.execute("select * from UserTable")

@@ -3,7 +3,7 @@ from abc import ABC,abstractmethod
 
 
 
-class IGalleryService(ABC):
+class I_GalleryService(ABC):
     @abstractmethod
     def readGallery(self):
         pass
@@ -16,7 +16,7 @@ class IGalleryService(ABC):
     @abstractmethod
     def updateGallery(self,galleryId,name, description, location, curator, openingHours, artistID):
         pass
-class GalleryService(IGalleryService,DBConnection):
+class GalleryService(I_GalleryService,DBConnection):
     def readGallery(self):
         try:
             self.cursor.execute("select * from gallery")

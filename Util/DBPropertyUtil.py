@@ -1,7 +1,7 @@
 class PropertyUtil:
     @staticmethod
     def get_property_string():
-        server_name=r"DESKTOP-QFPQL5Q\MSSQLSERVER01"
+        server_name="DESKTOP-QFPQL5Q\MSSQLSERVER01"
         database_name="case study"
 
         conn_str = (

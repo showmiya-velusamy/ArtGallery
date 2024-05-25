@@ -2,7 +2,7 @@ from Util.DBConn import DBConnection
 from abc import ABC,abstractmethod
 
 
-class IArtistService(ABC):
+class I_ArtistService(ABC):
     @abstractmethod
     def readArtist(self):
         pass
@@ -15,7 +15,7 @@ class IArtistService(ABC):
     @abstractmethod
     def updateArtist(self,artistId,name,biography,birthDate,nationality,website,contactInformation):
         pass
-class ArtistService(IArtistService,DBConnection):
+class ArtistService(I_ArtistService,DBConnection):
     def readArtist(self):
         try:
             self.cursor.execute("select * from artist")

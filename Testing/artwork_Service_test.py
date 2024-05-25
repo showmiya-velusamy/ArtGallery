@@ -1,6 +1,6 @@
 import unittest
 
-from DAO.artwork_Service import ArtworkService
+from DAO.IArtworkServices import ArtworkService
 from Entity.Artwork import Artwork
 
 

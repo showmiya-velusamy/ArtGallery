@@ -1,7 +1,7 @@
 from Util.DBConn import DBConnection
 from abc import ABC,abstractmethod
 
-class IUserFavoriterArtwork(ABC):
+class I_UserFavouriterArtwork(ABC):
     @abstractmethod
     def getUserFavoriteArtwork(self):
         pass
@@ -18,7 +18,7 @@ class IUserFavoriterArtwork(ABC):
     def removeArtworkFromFavorite(self,userId,artworkId):
         pass
 
-class UserFavoriteArtworkService(IUserFavoriterArtwork,DBConnection):
+class UserFavouriteArtworkService(I_UserFavouriterArtwork,DBConnection):
     def getUserFavoriteArtwork(self):
         try:
             self.cursor.execute("select * from user_favourite_artwork")

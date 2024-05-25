@@ -1,12 +1,12 @@
-from Entity import Artwork,Artist,User,Gallery,User_Favorite_Artwork
-from DAO import ArtworkService,ArtistService,UserService,GalleryService,UserFavoriteArtworkService,ArtworkGalleryService
+from Entity import Artwork,Artist,User,User_Favourite_Artwork
+from DAO import ArtistService, ArtworkService, GalleryService, UserFavouriteArtworkService,UserService
 
 class MainMenu:  
     artwork_service=ArtworkService() 
     artist_service=ArtistService()
     user_service=UserService()
     gallery_service=GalleryService()
-    user_favorite_artwork_service=UserFavoriteArtworkService()
+    user_favorite_artwork_service=UserFavouriteArtworkService()
 
     def artwork_menu(self):
             while True:
@@ -193,7 +193,7 @@ class MainMenu:
             elif choice == 3:
                 userId = input("Enter userId: ")
                 artworkId = input("Enter artworkId: ")
-                new_favoriteArtwork=User_Favorite_Artwork(userId,artworkId)
+                new_favoriteArtwork=User_Favourite_Artwork(userId,artworkId)
                 self.user_favorite_artwork_service.addArtworkToFavorite(new_favoriteArtwork)
             elif choice == 4:
                 userId = input("Enter userId: ")
